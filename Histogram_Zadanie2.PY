@@ -3,10 +3,9 @@ import cv2
 import requests
 import matplotlib.pyplot as plt
 
-#Trzy zdjęcia do wyboru
+#Dwa zdjęcia do wyboru
 #IMG_URL = "https://upload.wikimedia.org/wikipedia/commons/3/3f/Fronalpstock_big.jpg"
-IMG_URL = "https://upload.wikimedia.org/wikipedia/commons/3/32/Bad_Bellingen_-_St._Petrus_und_Paulus12.jpg"
-#IMG_URL = "https://upload.wikimedia.org/wikipedia/commons/1/1d/Penguin_in_Antarctica_jumping_out_of_the_water.jpg"
+IMG_URL = "https://upload.wikimedia.org/wikipedia/commons/1/1d/Penguin_in_Antarctica_jumping_out_of_the_water.jpg"
 
 
 def download_image(url):
@@ -16,18 +15,9 @@ def download_image(url):
     }
     r = requests.get(url, headers=headers, timeout=20, allow_redirects=True)
 
-    if r.status_code != 200:
-        raise RuntimeError(f"Błąd HTTP: {r.status_code}")
-
-    if "image" not in r.headers.get("Content-Type", ""):
-        raise RuntimeError("Pobrany zasób nie jest obrazem.")
-
     data = np.frombuffer(r.content, np.uint8)
     img = cv2.imdecode(data, cv2.IMREAD_COLOR)
-
-    if img is None:
-        raise RuntimeError("OpenCV nie potrafi zdekodować obrazu.")
-
+    
     return img
 
 def show_image(img):
